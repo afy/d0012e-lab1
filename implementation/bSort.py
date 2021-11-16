@@ -33,14 +33,14 @@ def insertionSort(arr):
         arr[j+1] = key
     return arr
 
-def mergeSort(a, sort, n):
+def mergeSort(a, sort, d):
     #print("{} {}".format(a, n))
-    if len(a) == 1 or n == 0:
+    if len(a) == 1 or d == 0:
         return a
 
     mid = len(a) // 2
-    l = mergeSort(a[mid:], sort, n-1)
-    r = mergeSort(a[:mid], sort, n-1)    
+    l = mergeSort(a[mid:], sort, d-1)
+    r = mergeSort(a[:mid], sort, d-1)    
     return sort(l + r)
         
 ##

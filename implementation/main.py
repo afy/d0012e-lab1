@@ -55,31 +55,74 @@ def test2():
     rnd.shuffle(l2)
     steps = 8
     times = []
+    titles = [2**(it) for it in range(steps)]
     for t in range(steps): times.append([])
     nscale = []
-    for n in range(1, nmax, nmax//6):
+    for n in range(1, nmax, nmax//7):
         i = l2[0:n+1]
-        nscale.append(n)
-        
+        nscale.append(n)      
         for it in range(steps):
             s = time.time()
-            mergeSort(i, binarySort, 2**it)
+            mergeSort(i, binarySort, titles[it])
             e = time.time()
             times[it].append(e-s)
-            
+    
         print("{}/{}".format(n, nmax))
 
     for j in range(steps):
-         axs.plot(nscale, times[j], label="k="+str(2**j))
+         axs.plot(nscale, times[j], label="k="+str(nmax//titles[j]))
     ##.set_xlim(0, nmax)
     ##axs.set_ylim(0, 200)
     axs.set_xlabel('sample size')
     axs.set_ylabel('time')
         
     
+def test3():
+    ls = [x for x in range(nmax)]
+    lns = [z for z in range(nmax)]
+    rnd.shuffle(lns)
 
+    mid = nmax//2
+    lps1 = [x for x in range(mid)]
+    lps2 = [x for x in range(mid, nmax)]
+    rnd.shuffle(lps1)
+    lps = lps1 + lps2
+    print(len(lps))
+    print(len(ls))
+    
+    timels = []
+    timelps = []
+    timelns = []
+    nscale = []
+    for n in range(1, nmax, nmax//10):
+        nscale.append(n)
 
-test2()
+        s1 = time.time()
+        mergeSort(ls[0:n+1], binarySort, 999999)
+        e1 = time.time()
+        timels.append(e1 - s1)
+
+        s2 = time.time()
+        mergeSort(lps[0:n+1], binarySort, 999999)
+        e2 = time.time()
+        timelps.append(e2 - s2)
+
+        s3 = time.time()
+        mergeSort(lns[0:n+1], binarySort, 999999)
+        e3 = time.time()
+        timelns.append(e3 - s3)
+        
+        print("{}/{}".format(n, nmax))
+        
+    axs.plot(nscale, timels,  label="Fully sorted")
+    axs.plot(nscale, timelps, label="Partially sorted")
+    axs.plot(nscale, timelns, label="Not sorted (random)")
+    ##.set_xlim(0, nmax)
+    ##axs.set_ylim(0, 200)
+    axs.set_xlabel('sample size')
+    axs.set_ylabel('time')   
+
+test3()
 axs.grid(True)
 plt.legend(loc='best')
 fig.tight_layout()
