@@ -33,17 +33,23 @@ def insertionSort(arr):
         arr[j+1] = key
     return arr
 
-def mergeSort(a, sort):
-    if len(a) == 1:
+def mergeSort(a, sort, n):
+    #print("{} {}".format(a, n))
+    if len(a) == 1 or n == 0:
         return a
+
     mid = len(a) // 2
-    l = sort(mergeSort(a[mid:], sort))
-    r = sort(mergeSort(a[:mid], sort))    
+    l = mergeSort(a[mid:], sort, n-1)
+    r = mergeSort(a[:mid], sort, n-1)    
     return sort(l + r)
         
 ##
-##l = [rnd.randint(0, 99) for x in range(0,10)]
-##print(l)
+##l = [rnd.randint(0, 99) for x in range(0,10000)]
+#print("<==" + str(l))
+##ss = time.time()
+##x = mergeSort(l, binarySort, 999)
+##ee = time.time()
+#print("==> {}".format(mergeSort(l, binarySort, 2)))
 ##print("=")
 ##s1 = time.time()
 ##r1 = mergeSort(l, insertionSort)

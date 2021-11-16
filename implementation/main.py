@@ -11,77 +11,35 @@ matplotlib.use("TkAgg")
 fig, axs = plt.subplots(1, 1)
 
 nmax = 15000
-kmax = 1
 
-timeIS = [0 for x in range(0, nmax)]
-opsIS = timeIS.copy()
-timeMS = timeIS.copy()
-opsMS = timeIS.copy()
-
-def insertionSortExec(l):
-    return [len(l), len(l)-1]
-
-def mergeSortExec(l, k):
-    return [k, l[k]]         
-
-def test1(): # timeIS opsIS timeMS opsMS
+def test1(): 
     l1 = [x for x in range(nmax)]
-    print("finised calculating l1")
-    for n in range(0, nmax):
-        i = l1[0:n]
-        rnd.shuffle(i)
-        IS = insertionSortExec(i)
-        timeIS.append(IS[0])
-        opsIS.append(IS[1])
-
-        for k in range(1, kmax+1):
-            MS = mergeSortExec(i, k)
-            timeMS.append(MS[0])
-            opsMS.append(MS[1])
-
-        print("finished calculating {}/{}".format(n, nmax))
-        
-
-
-
-def test2(): # timeMS opsMS n/k
-    l2 = [x for x in range(nmax)]
-    rnd.shuffle(l2)
+    rnd.shuffle(l1)
     timeMIS = []
     timeMBS = []
     timeIS = []
     nscale = []
     for n in range(1, nmax, nmax//20):
-        i = l2[0:n+1]
+        i = l1[0:n+1]
         nscale.append(n)
         ri = i.copy()
-
         si = time.time()
         ri.sort()
         ei = time.time()
-        timeIS.append(ei-si)
-        
+        timeIS.append(ei-si)  
         s1 = time.time()
-        r1 = mergeSort(i, insertionSort)
+        r1 = mergeSort(i, insertionSort, 99999)
         e1 = time.time()
         timeMIS.append(e1-s1)
-
         s2 = time.time()
-        r2 = mergeSort(i, binarySort)
+        r2 = mergeSort(i, binarySort, 99999)
         e2 = time.time()
         timeMBS.append(e2-s2)
-
-##        print(ri)
-##        print(r1)
-##        print(r2)
         
-        if r1 != ri:
-            print("wrong value for 1")
-        if r2 != ri:
-            print("wrong value for 2")
+        if r1 != ri: print("wrong value for 1")
+        if r2 != ri: print("wrong value for 2")
             
         print("{}/{}".format(n, nmax))
-
         
     axs.plot(nscale, timeMIS,  label="MIS time")
     axs.plot(nscale, timeMBS, label="MBS time")
@@ -89,8 +47,34 @@ def test2(): # timeMS opsMS n/k
     ##.set_xlim(0, nmax)
     ##axs.set_ylim(0, 200)
     axs.set_xlabel('sample size')
-    axs.set_ylabel('time')               
+    axs.set_ylabel('time')
 
+
+def test2():
+    l2 = [x for x in range(nmax)]
+    rnd.shuffle(l2)
+    steps = 8
+    times = []
+    for t in range(steps): times.append([])
+    nscale = []
+    for n in range(1, nmax, nmax//6):
+        i = l2[0:n+1]
+        nscale.append(n)
+        
+        for it in range(steps):
+            s = time.time()
+            mergeSort(i, binarySort, 2**it)
+            e = time.time()
+            times[it].append(e-s)
+            
+        print("{}/{}".format(n, nmax))
+
+    for j in range(steps):
+         axs.plot(nscale, times[j], label="k="+str(2**j))
+    ##.set_xlim(0, nmax)
+    ##axs.set_ylim(0, 200)
+    axs.set_xlabel('sample size')
+    axs.set_ylabel('time')
         
     
 
