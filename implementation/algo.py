@@ -2,50 +2,47 @@ import random as rnd
 import math
 import time
 
-
 def binarySearch(e, a, l, h):
     m = l + (h - l) // 2
-    #print("{} {} {} {} {}".format(e, a, l, h, m))
     if h < l:
         return m + 1
     if a[m] == e:
         return m
-    elif a[m] > e: # stega ner 
+    elif a[m] > e:
         return binarySearch(e, a, l , m - 1)
-    else: # stega upp
+    else:
         return binarySearch(e, a, m + 1, h)
 
 def binarySort(a):
-    na = [a[0]]
     for i in range(1, len(a)):
-        e = a[i]
-        ni = binarySearch(e, na, 0, len(na)-1)
-        na = na[:ni] + [e] + na[ni:]
-    return na
+        temp = a[i]
+        j = i - 1
+        if temp < a[j]:
+            ni = binarySearch(temp, a, 0, j)
+            del a[i]
+            a = a[:ni] + [temp] + a[ni:]
+    return a
 
-def insertionSort(arr):
-    for i in range(1, len(arr)):  
-        key = arr[i]
+def insertionSort(a):
+    for i in range(1, len(a)):
+        temp = a[i]
         j = i-1
-        while j >=0 and key < arr[j] :
-                arr[j+1] = arr[j]
-                j -= 1
-        arr[j+1] = key
-    return arr
+        while j >= 0 and a[j] > temp:
+            a[j], a[j+1] = a[j+1], a[j]
+            j -= 1
+    return a
 
 def mergeSort(a, sort, d):
-    #print("{} {}".format(a, n))
     if len(a) == 1 or d == 0:
         return a
-
     mid = len(a) // 2
     l = mergeSort(a[mid:], sort, d-1)
     r = mergeSort(a[:mid], sort, d-1)    
-    return sort(l + r)
-        
-##
-##l = [rnd.randint(0, 99) for x in range(0,10000)]
-#print("<==" + str(l))
+    return sort(l + r)  
+
+##l = [rnd.randint(0, 99) for x in range(0,5)]
+##print("<==" + str(l))
+##print("==>", binarySort(l))
 ##ss = time.time()
 ##x = mergeSort(l, binarySort, 999)
 ##ee = time.time()
@@ -58,10 +55,13 @@ def mergeSort(a, sort, d):
 ##s2 = time.time()
 ##r2 = insertionSort(l)
 ##e2 = time.time()
+##print("==>" + str(r2))
+##print(e2 - s2)
 ##print("===")
 ##s3 = time.time()
-##r3 = mergeSort(l, binarySort)
+##r3 = mergeSort(l, binarySort, 999999)
 ##e3 = time.time()
+##print("==>" + str(r3))
 ##print("====")
 ##s4 = time.time()
 ##r4 = binarySort(l)
