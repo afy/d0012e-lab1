@@ -32,14 +32,52 @@ def insertionSort(a):
             j -= 1
     return a
 
-def mergeSort(a, sort, d):
-    if len(a) == 1 or d == 0:
-        return a
+def mergeSort(a, sort, k):
+    if len(a) <= k:
+        return sort(a)
+    
     mid = len(a) // 2
-    l = mergeSort(a[mid:], sort, d-1)
-    r = mergeSort(a[:mid], sort, d-1)    
-    return sort(l + r)  
+    l = mergeSort(a[mid:], sort, k)
+    r = mergeSort(a[:mid], sort, k)
 
+    ret = []
+    while len(l) > 0 and len(r) > 0:
+        if l[0] > r[0] or l[0] == r[0]:
+            ret.append(r[0])
+            del r[0]
+        elif r[0] > l[0]:
+            ret.append(l[0])
+            del l[0]
+            
+    for el in l:
+        ret.append(el)
+    for er in r:
+        ret.append(er)
+             
+    return ret
+
+##mergeSort([rnd.randint(0,999) for x in range(0, rnd.randint(0,500000))], binarySort, 1000)
+##print("done")
+
+##while 1:
+##    l = [rnd.randint(0,999) for x in range(0, rnd.randint(0,5000))]
+##    r = l.copy()
+##    r.sort()
+##    if mergeSort(l, binarySort, 2) != r: print("u fucked up son")
+##
+##    print("ok")
+
+##while 1:
+##    l = [rnd.randint(0,999) for x in range(0, rnd.randint(0,5000))]
+##    r = l.copy()
+##    r.sort()
+##    r1 = insertionSort(l)
+##    r2 = binarySort(l)
+##
+##    if r1 != r: print("r1")
+##    if r2 != r: print("r2")
+##
+##    print("ok")
 ##l = [rnd.randint(0, 99) for x in range(0,5)]
 ##print("<==" + str(l))
 ##print("==>", binarySort(l))

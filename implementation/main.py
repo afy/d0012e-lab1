@@ -86,7 +86,7 @@ def test3():
     timelps = []
     timelns = []
     nscale = []
-    for n in range(1, nmax, nmax//10):
+    for n in range(1, nmax, nmax//20):
         nscale.append(n)
 
         s1 = time.time()
@@ -111,11 +111,44 @@ def test3():
     axs.plot(nscale, timelns, label="Not sorted (random)")
 
 
-test1()
+
+
+
+
+
+
+def test4():
+    n = 10000
+    l = [rnd.randint(0, 999) for x in range(n)]
+    timeis = []
+    timebs = []
+    scale = []
+    for k in range(1, n-1, (n-1)//15):
+        scale.append(k)
+        
+        s = time.time()
+        mergeSort(l, insertionSort, k)
+        e = time.time()
+        timeis.append(e-s)
+
+        s = time.time()
+        mergeSort(l, binarySort, k)
+        e = time.time()
+        timebs.append(e-s)
+
+        print(k)
+
+
+    axs.plot(scale, timeis, label="Insertion sort")
+    axs.plot(scale, timebs, label="bSort")
+    axs.set_xlabel('k')
+    axs.set_ylabel('time')   
+                  
+#test1()
 #test2()
 #test3()
-axs.set_xlabel('sample size')
-axs.set_ylabel('time')   
+test4()
+
 axs.grid(True)
 plt.legend(loc='best')
 fig.tight_layout()
